@@ -97,13 +97,14 @@ export function Layout({ children }: { children: ReactNode }) {
                   onClick={openLogin}
                   className="flex items-center gap-1.5 text-sm font-bold text-foreground hover:text-primary transition-colors"
                 >
-                  <User className="w-4 h-4" /> Sign In
+                  Sign In
                 </button>
                 <button
                   onClick={openRegister}
-                  className="bg-primary text-primary-foreground px-5 py-2 rounded-full text-sm font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all hover:-translate-y-0.5"
+                  className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/30 hover:border-primary shadow-md transition-all hover:scale-105 bg-muted"
+                  title="Create Account"
                 >
-                  Register Free
+                  <img src="/default-profile.png" alt="Profile" className="w-full h-full object-cover" />
                 </button>
               </>
             )}
@@ -159,8 +160,9 @@ export function Layout({ children }: { children: ReactNode }) {
                       <button onClick={openLogin} className="py-3 px-4 rounded-xl font-bold text-base text-center border border-primary text-primary">
                         Sign In
                       </button>
-                      <button onClick={openRegister} className="bg-primary text-primary-foreground py-3 px-4 rounded-full text-sm font-bold text-center shadow-md">
-                        Register Free
+                      <button onClick={openRegister} className="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-base text-foreground hover:bg-muted">
+                        <img src="/default-profile.png" alt="Profile" className="w-8 h-8 rounded-full object-cover border border-primary/30" />
+                        Create Account
                       </button>
                     </>
                   )}
