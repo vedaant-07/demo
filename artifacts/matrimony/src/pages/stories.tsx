@@ -23,14 +23,14 @@ export function Stories() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Heart className="w-8 h-8 text-secondary mx-auto mb-6" />
-            <h1 className="text-5xl md:text-6xl font-serif text-primary mb-6 leading-tight">Happily Ever After</h1>
-            <p className="text-lg text-muted-foreground font-light leading-relaxed mb-8">
-              Read the beautiful journeys of couples who found their soulmates through our platform. Each story is a testament to the magic of perfect matchmaking.
+            <Heart className="w-8 h-8 text-secondary mx-auto mb-6 fill-secondary" />
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif text-primary mb-5 leading-tight">Pyaar ki<br />Kahaniyaan</h1>
+            <p className="text-base sm:text-lg text-muted-foreground font-light leading-relaxed mb-8 max-w-2xl mx-auto">
+              Unke dil ki awaaz suniye jinhe Anurup Sathi pe apna jeewan saathi mila. Har kahani ek sachche rishte ki gawah hai.
             </p>
             <Link href="/submit-story">
               <Button variant="outline" className="rounded-full border-primary/20 text-primary hover:bg-primary/5">
-                <Plus className="w-4 h-4 mr-2" /> Share Your Story
+                <Plus className="w-4 h-4 mr-2" /> Apni Kahani Batayein
               </Button>
             </Link>
           </motion.div>
@@ -59,7 +59,7 @@ export function Stories() {
                   />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
                   <div className="absolute bottom-6 left-6 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-medium tracking-widest uppercase border border-white/20">
-                    Married {story.marriageYear}
+                    {story.marriageYear} mein shaadi
                   </div>
                 </div>
                 

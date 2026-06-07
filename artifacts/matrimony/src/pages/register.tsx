@@ -52,8 +52,8 @@ export function Register() {
     createProfile.mutate({ data }, {
       onSuccess: () => {
         toast({
-          title: "Profile Created",
-          description: "Welcome to SoulMate. Your journey begins here.",
+          title: "Profile Ban Gaya!",
+          description: "Anurup Sathi mein aapka swagat hai. Aapka safar shuru hota hai.",
         });
         setLocation("/browse");
       },
@@ -79,8 +79,8 @@ export function Register() {
           className="max-w-3xl mx-auto glass-panel p-8 md:p-12 rounded-3xl shadow-2xl border border-white/20 bg-background/95 dark:bg-background/80"
         >
           <div className="text-center mb-10">
-            <h1 className="text-4xl font-serif text-primary mb-3">Create Your Legacy</h1>
-            <p className="text-muted-foreground">Join our exclusive enclave to find a partner who shares your vision for life.</p>
+            <h1 className="text-4xl sm:text-5xl font-serif text-primary mb-3">Apna Profile Banayein</h1>
+            <p className="text-muted-foreground text-sm sm:text-base">Anurup Sathi ke saath judein aur apne jeewan saathi ki talash shuru karein.</p>
           </div>
 
           <Form {...form}>
@@ -208,12 +208,12 @@ export function Register() {
                 )}
               />
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={createProfile.isPending}
                 className="w-full py-8 text-lg font-serif tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl rounded-xl transition-all hover:-translate-y-1"
               >
-                {createProfile.isPending ? <Loader2 className="w-6 h-6 animate-spin" /> : "Submit Profile"}
+                {createProfile.isPending ? <Loader2 className="w-6 h-6 animate-spin" /> : "Profile Submit Karein"}
               </Button>
             </form>
           </Form>

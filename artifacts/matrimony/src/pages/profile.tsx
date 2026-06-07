@@ -26,14 +26,14 @@ export function ProfileDetail() {
     sendInterest.mutate({ data: { fromProfileId: 1, toProfileId: profile.id } }, {
       onSuccess: () => {
         toast({
-          title: "Interest Sent Successfully",
-          description: `Your interest has been sent to ${profile.name}.`,
+          title: "Rishta Bheja Gaya!",
+          description: `${profile.name} ko aapka rishta bheja ja chuka hai.`,
         });
       },
       onError: () => {
         toast({
-          title: "Action Failed",
-          description: "Could not send interest. Please try again.",
+          title: "Kuch Galat Hua",
+          description: "Rishta nahi bheja ja saka. Dobara koshish karein.",
           variant: "destructive"
         });
       }
@@ -51,8 +51,8 @@ export function ProfileDetail() {
   if (!profile) {
     return (
       <div className="min-h-screen pt-24 flex flex-col items-center justify-center text-center">
-        <h1 className="text-4xl font-serif text-primary mb-4">Profile Not Found</h1>
-        <p className="text-muted-foreground">The profile you are looking for does not exist or has been removed.</p>
+        <h1 className="text-4xl font-serif text-primary mb-4">Profile Nahi Mila</h1>
+        <p className="text-muted-foreground">Yeh profile maujood nahi hai ya hata di gayi hai.</p>
       </div>
     );
   }
@@ -66,77 +66,103 @@ export function ProfileDetail() {
         <div className="max-w-5xl mx-auto glass-panel rounded-3xl overflow-hidden shadow-2xl border border-primary/10">
           <div className="flex flex-col md:flex-row">
             {/* Image Section */}
-            <div className="w-full md:w-2/5 relative h-[500px] md:h-auto">
-              <img 
-                src={profile.photo || bride2} 
-                alt={profile.name} 
+            <div className="w-full md:w-2/5 relative h-72 sm:h-96 md:h-auto min-h-[350px]">
+              <img
+                src={profile.photo || bride2}
+                alt={profile.name}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 text-white">
-                <h1 className="text-4xl md:text-5xl font-serif leading-tight">{profile.name}</h1>
-                <p className="text-lg text-white/80 mt-2 font-light">{profile.age} yrs • {profile.city}</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 text-white">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif leading-tight">{profile.name}</h1>
+                <p className="text-base sm:text-lg text-white/80 mt-1 font-light">
+                  {profile.age} saal &bull; {profile.city}
+                  {profile.state ? `, ${profile.state}` : ""}
+                </p>
+                {profile.featured && (
+                  <span className="inline-block mt-2 px-3 py-0.5 bg-secondary/90 text-secondary-foreground text-[10px] font-bold uppercase tracking-widest rounded-full">
+                    Featured
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Content Section */}
-            <div className="w-full md:w-3/5 p-8 md:p-12 flex flex-col">
-              <div className="flex-1 space-y-10">
+            <div className="w-full md:w-3/5 p-6 sm:p-8 md:p-10 flex flex-col">
+              <div className="flex-1 space-y-7">
+                {/* Quick Tags */}
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    profile.religion,
+                    profile.caste,
+                    profile.gender,
+                    `${profile.age} saal`,
+                  ].filter(Boolean).map((tag) => (
+                    <span key={tag} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
                 <section>
-                  <h2 className="text-sm font-semibold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <Info className="w-4 h-4" /> About
+                  <h2 className="text-xs font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <Info className="w-3.5 h-3.5" /> Parichay
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed text-lg font-light">
-                    {profile.bio || "A distinguished individual looking for a meaningful connection based on shared values and mutual respect."}
+                  <p className="text-muted-foreground leading-relaxed text-base md:text-lg font-light">
+                    {profile.bio || "Ek vishisht vyakti jo samaan vichar aur moolyaon ke aadhar par sachcha rishta dhundh rahe hain."}
                   </p>
                 </section>
 
-                <div className="grid grid-cols-2 gap-8">
-                  <section>
-                    <h3 className="text-sm font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
-                      <GraduationCap className="w-4 h-4" /> Education
+                <div className="grid grid-cols-2 gap-5">
+                  <section className="bg-muted/30 rounded-xl p-4">
+                    <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                      <GraduationCap className="w-3.5 h-3.5" /> Shiksha
                     </h3>
-                    <p className="text-foreground font-medium">{profile.education || "Not specified"}</p>
-                  </section>
-                  
-                  <section>
-                    <h3 className="text-sm font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
-                      <Briefcase className="w-4 h-4" /> Profession
-                    </h3>
-                    <p className="text-foreground font-medium">{profile.profession || "Not specified"}</p>
+                    <p className="text-foreground font-medium text-sm">{profile.education || "Nahi bataya"}</p>
                   </section>
 
-                  <section>
-                    <h3 className="text-sm font-semibold text-primary uppercase tracking-widest mb-3">Religion & Caste</h3>
-                    <p className="text-foreground font-medium">{profile.religion}{profile.caste ? `, ${profile.caste}` : ""}</p>
+                  <section className="bg-muted/30 rounded-xl p-4">
+                    <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                      <Briefcase className="w-3.5 h-3.5" /> Peshaa
+                    </h3>
+                    <p className="text-foreground font-medium text-sm">{profile.profession || "Nahi bataya"}</p>
                   </section>
 
-                  <section>
-                    <h3 className="text-sm font-semibold text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
-                      <MapPin className="w-4 h-4" /> Location
+                  <section className="bg-muted/30 rounded-xl p-4">
+                    <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">Dharm / Jati</h3>
+                    <p className="text-foreground font-medium text-sm">
+                      {profile.religion}{profile.caste ? ` · ${profile.caste}` : ""}
+                    </p>
+                  </section>
+
+                  <section className="bg-muted/30 rounded-xl p-4">
+                    <h3 className="text-xs font-semibold text-primary uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5" /> Niwas
                     </h3>
-                    <p className="text-foreground font-medium">{profile.city}{profile.state ? `, ${profile.state}` : ""}</p>
+                    <p className="text-foreground font-medium text-sm">
+                      {profile.city}{profile.state ? `, ${profile.state}` : ""}
+                    </p>
                   </section>
                 </div>
               </div>
 
-              <div className="mt-12 pt-8 border-t border-border">
-                <Button 
+              <div className="mt-8 pt-6 border-t border-border space-y-3">
+                <Button
                   onClick={handleSendInterest}
                   disabled={sendInterest.isPending}
-                  className="w-full py-8 text-lg font-serif tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl rounded-xl transition-all hover:-translate-y-1 group"
+                  className="w-full py-6 text-base sm:text-lg font-serif tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl rounded-xl transition-all hover:-translate-y-1 group"
                 >
                   {sendInterest.isPending ? (
-                    <Loader2 className="w-6 h-6 animate-spin" />
+                    <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
                     <>
-                      Send Interest
-                      <Heart className="ml-3 w-5 h-5 group-hover:fill-current transition-all" />
+                      Rishta Bhejein
+                      <Heart className="ml-3 w-5 h-5 group-hover:fill-primary-foreground transition-all" />
                     </>
                   )}
                 </Button>
-                <p className="text-center text-xs text-muted-foreground mt-4 uppercase tracking-widest">
-                  Secure & Confidential Express of Interest
+                <p className="text-center text-xs text-muted-foreground uppercase tracking-widest">
+                  Surakshit aur Gupt — Aapki Privacy Hamari Zimmedari
                 </p>
               </div>
             </div>
