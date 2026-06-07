@@ -1,0 +1,15 @@
+[build]
+  command = "pnpm --filter @workspace/matrimony build"
+  publish = "artifacts/matrimony/dist/public"
+
+[build.environment]
+  PORT = "3000"
+  BASE_PATH = "/"
+  NODE_ENV = "production"
+  NODE_VERSION = "22"
+  PNPM_VERSION = "10.26.1"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
