@@ -109,7 +109,7 @@ export function Home() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section className="py-16 md:py-28 mx-3 md:mx-8 overflow-hidden" style={{ background: "hsl(345 10% 95%)", borderRadius: "2.5rem" }}>
+      <section className="py-16 md:py-28 mx-4 md:mx-12 lg:mx-20 overflow-hidden" style={{ background: "hsl(345 10% 95%)", borderRadius: "3rem" }}>
         <div className="container mx-auto px-4 md:px-8">
           <div className="text-center mb-12 md:mb-16">
             <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-foreground mb-4">
