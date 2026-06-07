@@ -109,7 +109,7 @@ export function Home() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section className="py-16 md:py-28 bg-muted/30">
+      <section className="py-16 md:py-28 bg-muted/30 rounded-[2rem] md:rounded-[3rem] mx-2 md:mx-6">
         <div className="container mx-auto px-4 md:px-8">
           <div className="text-center mb-12 md:mb-16">
             <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-foreground mb-4">
