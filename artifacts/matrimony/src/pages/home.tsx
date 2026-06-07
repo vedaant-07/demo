@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "wouter";
-import { useGetStats, useListFeaturedProfiles, useListStories } from "@workspace/api-client-react";
+import { useListFeaturedProfiles, useListStories } from "@workspace/api-client-react";
 import weddingImg from "@/assets/wedding_main.png";
 import { ProfileCard } from "@/components/profile-card";
 import { useRef } from "react";
@@ -13,7 +13,6 @@ const HOW_STEPS = [
 ];
 
 export function Home() {
-  const { data: stats } = useGetStats();
   const { data: featuredProfiles } = useListFeaturedProfiles();
   const { data: stories } = useListStories();
   const heroRef = useRef(null);
@@ -107,35 +106,6 @@ export function Home() {
           <span>Scroll Down</span>
           <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.5 }} className="w-px h-8 bg-white/30" />
         </motion.div>
-      </section>
-
-      {/* ── STATS ── */}
-      <section className="py-16 md:py-20 bg-background relative z-20 -mt-8 rounded-t-[32px] md:rounded-t-[48px] border-t border-border shadow-2xl">
-        <div className="container mx-auto px-4 md:px-8">
-          <p className="text-center text-xs uppercase tracking-widest text-muted-foreground font-bold mb-10">Our Impact</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            {[
-              { value: stats?.totalMembers || 0, label: "Members" },
-              { value: stats?.totalMatches || 0, label: "Matches Made" },
-              { value: stats?.successStories || 0, label: "Success Stories" },
-              { value: stats?.citiesCovered || 0, label: "Cities Covered" },
-            ].map((stat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: i * 0.1 }}
-                className="text-center group py-4"
-              >
-                <h3 className="text-5xl sm:text-6xl md:text-7xl font-serif font-bold text-primary mb-2 group-hover:scale-110 transition-transform duration-500 tabular-nums">
-                  {stat.value.toLocaleString("en-IN")}+
-                </h3>
-                <p className="text-muted-foreground font-bold uppercase tracking-widest text-xs sm:text-sm">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* ── HOW IT WORKS ── */}
