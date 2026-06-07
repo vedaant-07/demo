@@ -10,6 +10,11 @@ const PgSession = connectPgSimple(session);
 
 const app: Express = express();
 
+// Replit (and most cloud hosts) terminate TLS at the proxy layer and forward
+// requests to the Node process over plain HTTP. Trust the first proxy so that
+// req.secure reflects the original HTTPS connection and Set-Cookie Secure flag works.
+app.set("trust proxy", 1);
+
 app.use(
   pinoHttp({
     logger,
@@ -39,10 +44,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      sameSite: "none",
     },
   }),
 );

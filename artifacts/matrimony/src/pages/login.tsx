@@ -63,7 +63,7 @@ export function AuthModal({ onClose, defaultTab = "login" }: AuthModalProps) {
         setLocation("/my-profile");
       },
       onError: (err: any) => {
-        const msg = err?.response?.data?.error || "Invalid email or password.";
+        const msg = err?.data?.error || err?.message || "Invalid email or password.";
         toast({ title: "Sign in failed", description: msg, variant: "destructive" });
       },
     });
@@ -78,7 +78,7 @@ export function AuthModal({ onClose, defaultTab = "login" }: AuthModalProps) {
         setLocation("/my-profile");
       },
       onError: (err: any) => {
-        const msg = err?.response?.data?.error || "Registration failed. Please try again.";
+        const msg = err?.data?.error || err?.message || "Registration failed. Please try again.";
         toast({ title: "Registration failed", description: msg, variant: "destructive" });
       },
     });
