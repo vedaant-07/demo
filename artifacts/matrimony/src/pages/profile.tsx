@@ -5,8 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Heart, Loader2, MapPin, GraduationCap, Briefcase, Info, Star, ArrowLeft } from "lucide-react";
 import { Link } from "wouter";
-const DEFAULT_MALE = "/default-male.png";
-const DEFAULT_FEMALE = "/default-female.png";
+const DEFAULT_PROFILE = "/default-profile.png";
 
 export function ProfileDetail() {
   const { id } = useParams<{ id: string }>();
@@ -71,7 +70,7 @@ export function ProfileDetail() {
             {/* Photo */}
             <div className="w-full md:w-2/5 relative h-80 sm:h-96 md:h-auto min-h-[380px]">
               <img
-                src={profile.photo || (profile.gender === "Female" ? DEFAULT_FEMALE : DEFAULT_MALE)}
+                src={profile.photo || DEFAULT_PROFILE}
                 alt={profile.name}
                 className="w-full h-full object-cover"
               />

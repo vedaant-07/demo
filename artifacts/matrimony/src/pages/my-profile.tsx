@@ -215,19 +215,12 @@ export function MyProfile() {
               transition={{ duration: 0.5 }}
               className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm"
             >
-              <div className="aspect-square bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
-                {profile?.photo ? (
-                  <img src={profile.photo} alt={profile.name} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center">
-                      <User className="w-12 h-12 text-primary" />
-                    </div>
-                    <p className="text-sm font-semibold text-muted-foreground px-4 text-center">
-                      {editing ? "Add a photo URL below" : "No photo added yet"}
-                    </p>
-                  </div>
-                )}
+              <div className="aspect-square bg-muted flex items-center justify-center relative">
+                <img
+                  src={profile?.photo || "/default-profile.png"}
+                  alt={profile?.name || user?.name || "Profile"}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-4">
                 <p className="font-serif font-bold text-xl text-foreground text-center">{profile?.name || user?.name}</p>

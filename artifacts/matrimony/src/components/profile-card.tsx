@@ -2,8 +2,7 @@ import { Link } from "wouter";
 import { Profile } from "@workspace/api-client-react";
 import { MapPin, GraduationCap, Briefcase, Heart, Star } from "lucide-react";
 
-const DEFAULT_MALE = "/default-male.png";
-const DEFAULT_FEMALE = "/default-female.png";
+const DEFAULT_PROFILE = "/default-profile.png";
 
 export function ProfileCard({ profile }: { profile: Profile }) {
   return (
@@ -12,7 +11,7 @@ export function ProfileCard({ profile }: { profile: Profile }) {
         {/* Photo */}
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
-            src={profile.photo || (profile.gender === "Female" ? DEFAULT_FEMALE : DEFAULT_MALE)}
+            src={profile.photo || DEFAULT_PROFILE}
             alt={profile.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
