@@ -112,6 +112,27 @@ export const CreateProfileBody = zod.object({
 
 
 /**
+ * @summary Get the current user's profile
+ */
+export const GetMyProfileResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "age": zod.number(),
+  "gender": zod.string(),
+  "religion": zod.string(),
+  "caste": zod.string().nullish(),
+  "city": zod.string(),
+  "state": zod.string().nullish(),
+  "education": zod.string().nullish(),
+  "profession": zod.string().nullish(),
+  "photo": zod.string(),
+  "bio": zod.string(),
+  "featured": zod.boolean(),
+  "createdAt": zod.string().optional()
+})
+
+
+/**
  * @summary Get featured profiles
  */
 export const ListFeaturedProfilesResponseItem = zod.object({

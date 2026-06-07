@@ -50,9 +50,36 @@ router.post("/profiles", async (req, res): Promise<void> => {
     return;
   }
 
-  const [profile] = await db.insert(profilesTable).values(parsed.data).returning();
+  const userId = req.session.userId ?? null;
+
+  const [profile] = await db.insert(profilesTable).values({
+    ...parsed.data,
+    userId,
+  }).returning();
 
   res.status(201).json(GetProfileResponse.parse({
+    ...profile,
+    createdAt: profile.createdAt.toISOString(),
+  }));
+});
+
+router.get("/profiles/me", async (req, res): Promise<void> => {
+  if (!req.session.userId) {
+    res.status(401).json({ error: "Not authenticated." });
+    return;
+  }
+
+  const [profile] = await db
+    .select()
+    .from(profilesTable)
+    .where(eq(profilesTable.userId, req.session.userId));
+
+  if (!profile) {
+    res.status(404).json({ error: "No profile found." });
+    return;
+  }
+
+  res.json(GetProfileResponse.parse({
     ...profile,
     createdAt: profile.createdAt.toISOString(),
   }));
@@ -96,6 +123,11 @@ router.get("/profiles/:id", async (req, res): Promise<void> => {
 });
 
 router.patch("/profiles/:id", async (req, res): Promise<void> => {
+  if (!req.session.userId) {
+    res.status(401).json({ error: "Not authenticated." });
+    return;
+  }
+
   const params = GetProfileParams.safeParse(req.params);
   if (!params.success) {
     res.status(400).json({ error: params.error.message });
@@ -111,11 +143,14 @@ router.patch("/profiles/:id", async (req, res): Promise<void> => {
   const [updated] = await db
     .update(profilesTable)
     .set(parsed.data)
-    .where(eq(profilesTable.id, params.data.id))
+    .where(and(
+      eq(profilesTable.id, params.data.id),
+      eq(profilesTable.userId, req.session.userId),
+    ))
     .returning();
 
   if (!updated) {
-    res.status(404).json({ error: "Profile not found" });
+    res.status(404).json({ error: "Profile not found or access denied" });
     return;
   }
 

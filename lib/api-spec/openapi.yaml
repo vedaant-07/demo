@@ -158,6 +158,23 @@ paths:
               schema:
                 $ref: "#/components/schemas/Profile"
 
+  /profiles/me:
+    get:
+      operationId: getMyProfile
+      tags: [profiles]
+      summary: Get the current user's profile
+      responses:
+        "200":
+          description: My profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "401":
+          description: Not authenticated
+        "404":
+          description: No profile yet
+
   /profiles/featured:
     get:
       operationId: listFeaturedProfiles

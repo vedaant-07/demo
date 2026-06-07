@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   useCreateProfile,
-  useGetProfile,
+  useGetMyProfile,
   useUpdateProfile,
-  getGetProfileQueryKey,
+  getGetMyProfileQueryKey,
 } from "@workspace/api-client-react";
 import { useAuth } from "@/context/auth";
 import { useToast } from "@/hooks/use-toast";
@@ -22,8 +22,6 @@ import {
   Save, X, AlertCircle
 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-
-const PROFILE_ID_KEY = "anurup_sathi_profile_id";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -79,18 +77,15 @@ export function MyProfile() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [editing, setEditing] = useState(false);
-  const [profileId, setProfileId] = useState<number | null>(() => {
-    const stored = localStorage.getItem(PROFILE_ID_KEY);
-    return stored ? parseInt(stored) : null;
-  });
 
   const createProfile = useCreateProfile();
   const updateProfile = useUpdateProfile();
 
-  const { data: profile, isLoading: profileLoading } = useGetProfile(profileId || 0, {
+  const { data: profile, isLoading: profileLoading } = useGetMyProfile({
     query: {
-      enabled: !!profileId,
-      queryKey: getGetProfileQueryKey(profileId || 0),
+      enabled: isAuthenticated,
+      queryKey: getGetMyProfileQueryKey(),
+      retry: false,
     },
   });
 
@@ -126,17 +121,17 @@ export function MyProfile() {
         bio: profile.bio,
         photo: profile.photo || "",
       });
-    } else if (user && !profileId) {
+    } else if (user && !profileLoading) {
       form.setValue("name", user.name);
       setEditing(true);
     }
-  }, [profile, user, profileId]);
+  }, [profile, user, profileLoading]);
 
   const onSubmit = (data: ProfileFormValues) => {
-    if (profileId && profile) {
-      updateProfile.mutate({ id: profileId, data }, {
+    if (profile) {
+      updateProfile.mutate({ id: profile.id, data }, {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: getGetProfileQueryKey(profileId) });
+          queryClient.invalidateQueries({ queryKey: getGetMyProfileQueryKey() });
           toast({ title: "Profile Updated!", description: "Your matrimonial profile has been saved." });
           setEditing(false);
         },
@@ -146,10 +141,8 @@ export function MyProfile() {
       });
     } else {
       createProfile.mutate({ data }, {
-        onSuccess: (newProfile) => {
-          localStorage.setItem(PROFILE_ID_KEY, String(newProfile.id));
-          setProfileId(newProfile.id);
-          queryClient.invalidateQueries();
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: getGetMyProfileQueryKey() });
           toast({ title: "Profile Created!", description: "Your matrimonial profile is now live." });
           setEditing(false);
         },
