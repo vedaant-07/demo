@@ -145,7 +145,7 @@ export function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7">
-            {featuredProfiles?.slice(0, 6).map((profile, i) => (
+            {(Array.isArray(featuredProfiles) ? featuredProfiles : []).slice(0, 6).map((profile, i) => (
               <motion.div
                 key={profile.id}
                 initial={{ opacity: 0, y: 40 }}
@@ -193,7 +193,7 @@ export function Home() {
               </div>
             </motion.div>
             <div className="space-y-6">
-              {stories?.slice(0, 3).map((story, i) => (
+              {(Array.isArray(stories) ? stories : []).slice(0, 3).map((story, i) => (
                 <motion.div
                   key={story.id}
                   initial={{ opacity: 0, x: 50 }}
