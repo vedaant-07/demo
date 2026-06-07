@@ -9,14 +9,15 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Search, SlidersHorizontal, Loader2, X, ChevronDown } from "lucide-react";
 
-export function Browse() {
-  const [filters, setFilters] = useState({
-    gender: "all",
-    religion: "all",
-    ageRange: [21, 55] as number[],
-    city: "",
-  });
+type Filters = {
+  gender: string;
+  religion: string;
+  ageRange: number[];
+  city: string;
+};
 
+export function Browse() {
+  const [filters, setFilters] = useState<Filters>({ gender: "all", religion: "all", ageRange: [21, 55], city: "" });
   const [debouncedCity, setDebouncedCity] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
@@ -52,12 +53,12 @@ export function Browse() {
       <div className="bg-primary/5 border-b border-border py-8 md:py-14">
         <div className="container mx-auto px-4 md:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <p className="text-xs uppercase tracking-widest text-primary/70 mb-2 font-medium">Anurup Sathi</p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif text-foreground mb-3">
-              Profiles Dhundein
+            <p className="text-xs uppercase tracking-widest text-primary/70 mb-2 font-bold">Anurup Sathi</p>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-foreground mb-3">
+              Discover Profiles
             </h1>
-            <p className="text-muted-foreground max-w-2xl text-sm sm:text-base">
-              Apni pasand ke mutabiq filters lagayein aur apne jeewan saathi se milein. Lakhs verified profiles aapka intezaar kar rahe hain.
+            <p className="text-muted-foreground max-w-2xl font-semibold">
+              Browse thousands of verified Indian matrimonial profiles. Use filters to find your ideal match by religion, city, age, and more.
             </p>
           </motion.div>
         </div>
@@ -68,29 +69,29 @@ export function Browse() {
         <div className="lg:hidden mb-4 flex items-center gap-3">
           <Button
             variant="outline"
-            className="flex-1 flex items-center justify-center gap-2 text-sm font-medium"
+            className="flex-1 flex items-center justify-center gap-2 font-bold"
             onClick={() => setShowFilters(!showFilters)}
           >
             <SlidersHorizontal className="w-4 h-4" />
-            Filter Karein
+            Filters
             {activeFilterCount > 0 && (
-              <span className="ml-1 w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">
+              <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">
                 {activeFilterCount}
               </span>
             )}
             <ChevronDown className={`w-4 h-4 ml-auto transition-transform ${showFilters ? "rotate-180" : ""}`} />
           </Button>
           {activeFilterCount > 0 && (
-            <Button variant="ghost" size="sm" onClick={resetFilters} className="text-primary gap-1 text-sm">
+            <Button variant="ghost" size="sm" onClick={resetFilters} className="text-primary gap-1 font-bold">
               <X className="w-3.5 h-3.5" /> Reset
             </Button>
           )}
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
-          {/* Sidebar Filters */}
+          {/* Mobile filters */}
           <AnimatePresence initial={false}>
-            {(showFilters) && (
+            {showFilters && (
               <motion.aside
                 key="mobile-filters"
                 initial={{ opacity: 0, height: 0 }}
@@ -99,42 +100,29 @@ export function Browse() {
                 transition={{ duration: 0.3 }}
                 className="w-full lg:hidden overflow-hidden"
               >
-                <FilterPanel
-                  filters={filters}
-                  setFilters={setFilters}
-                  debouncedCity={debouncedCity}
-                  setDebouncedCity={setDebouncedCity}
-                  onReset={resetFilters}
-                />
+                <FilterPanel filters={filters} setFilters={setFilters} debouncedCity={debouncedCity} setDebouncedCity={setDebouncedCity} onReset={resetFilters} />
               </motion.aside>
             )}
           </AnimatePresence>
 
-          {/* Desktop sidebar - always visible */}
+          {/* Desktop sidebar */}
           <aside className="hidden lg:block w-72 xl:w-80 shrink-0">
             <div className="sticky top-24">
-              <FilterPanel
-                filters={filters}
-                setFilters={setFilters}
-                debouncedCity={debouncedCity}
-                setDebouncedCity={setDebouncedCity}
-                onReset={resetFilters}
-              />
+              <FilterPanel filters={filters} setFilters={setFilters} debouncedCity={debouncedCity} setDebouncedCity={setDebouncedCity} onReset={resetFilters} />
             </div>
           </aside>
 
           {/* Profile Grid */}
           <main className="flex-1 min-w-0">
-            {/* Results header */}
             <div className="flex items-center justify-between mb-5">
-              <p className="text-sm text-muted-foreground">
-                {isLoading ? "Profiles dhundhe ja rahe hain..." : (
-                  <><span className="font-semibold text-foreground">{profiles?.length ?? 0}</span> profiles mile</>
+              <p className="text-sm text-muted-foreground font-semibold">
+                {isLoading ? "Searching profiles..." : (
+                  <><span className="font-bold text-foreground">{profiles?.length ?? 0}</span> profiles found</>
                 )}
               </p>
               {activeFilterCount > 0 && (
-                <button onClick={resetFilters} className="hidden lg:flex items-center gap-1.5 text-xs text-primary hover:underline">
-                  <X className="w-3 h-3" /> Filters Hatayein
+                <button onClick={resetFilters} className="hidden lg:flex items-center gap-1.5 text-xs text-primary font-bold hover:underline">
+                  <X className="w-3 h-3" /> Clear Filters
                 </button>
               )}
             </div>
@@ -142,7 +130,7 @@ export function Browse() {
             {isLoading ? (
               <div className="w-full h-64 flex flex-col items-center justify-center text-primary">
                 <Loader2 className="w-8 h-8 animate-spin mb-4" />
-                <p className="text-sm text-muted-foreground uppercase tracking-widest">Profiles Dhundhe Ja Rahe Hain...</p>
+                <p className="text-sm text-muted-foreground font-bold uppercase tracking-widest">Finding Profiles...</p>
               </div>
             ) : profiles && profiles.length > 0 ? (
               <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
@@ -163,9 +151,9 @@ export function Browse() {
               </motion.div>
             ) : (
               <div className="w-full h-64 flex flex-col items-center justify-center text-center p-8 rounded-2xl border border-dashed border-border bg-muted/20">
-                <h3 className="text-2xl font-serif text-primary mb-2">Koi Profile Nahi Mila</h3>
-                <p className="text-muted-foreground text-sm mb-4">Apne filters badlein aur dobara dhundein.</p>
-                <Button onClick={resetFilters} variant="outline" size="sm">Filters Reset Karein</Button>
+                <h3 className="text-2xl font-serif font-bold text-primary mb-2">No Profiles Found</h3>
+                <p className="text-muted-foreground font-semibold text-sm mb-4">Try adjusting your filters to see more results.</p>
+                <Button onClick={resetFilters} variant="outline" size="sm" className="font-bold">Clear Filters</Button>
               </div>
             )}
           </main>
@@ -175,15 +163,9 @@ export function Browse() {
   );
 }
 
-function FilterPanel({
-  filters,
-  setFilters,
-  debouncedCity,
-  setDebouncedCity,
-  onReset,
-}: {
-  filters: { gender: string; religion: string; ageRange: number[]; city: string };
-  setFilters: React.Dispatch<React.SetStateAction<typeof filters>>;
+function FilterPanel({ filters, setFilters, debouncedCity, setDebouncedCity, onReset }: {
+  filters: Filters;
+  setFilters: React.Dispatch<React.SetStateAction<Filters>>;
   debouncedCity: string;
   setDebouncedCity: (v: string) => void;
   onReset: () => void;
@@ -191,15 +173,12 @@ function FilterPanel({
   return (
     <div className="space-y-6 bg-card p-5 md:p-6 rounded-2xl border border-border shadow-sm">
       <div className="flex items-center justify-between">
-        <h2 className="font-serif text-lg text-foreground">Filter Karein</h2>
-        <button onClick={onReset} className="text-xs text-muted-foreground hover:text-primary transition-colors">
-          Reset
-        </button>
+        <h2 className="font-serif font-bold text-lg text-foreground">Filter Profiles</h2>
+        <button onClick={onReset} className="text-xs text-muted-foreground hover:text-primary transition-colors font-bold">Reset All</button>
       </div>
 
-      {/* City Search */}
       <div className="space-y-2">
-        <Label className="text-xs font-semibold text-primary uppercase tracking-wider">Shahar se Dhundein</Label>
+        <Label className="text-xs font-bold text-primary uppercase tracking-wider">Search by City</Label>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -207,7 +186,7 @@ function FilterPanel({
             className="pl-9"
             value={filters.city}
             onChange={(e) => {
-              setFilters((p) => ({ ...p, city: e.target.value }));
+              setFilters(p => ({ ...p, city: e.target.value }));
               const val = e.target.value;
               setTimeout(() => setDebouncedCity(val), 400);
             }}
@@ -215,31 +194,27 @@ function FilterPanel({
         </div>
       </div>
 
-      {/* Gender */}
       <div className="space-y-2">
-        <Label className="text-xs font-semibold text-primary uppercase tracking-wider">Ling (Gender)</Label>
+        <Label className="text-xs font-bold text-primary uppercase tracking-wider">Looking For</Label>
         <div className="grid grid-cols-3 gap-2">
-          {["all", "Male", "Female"].map((g) => (
+          {[{ v: "all", l: "All" }, { v: "Male", l: "Groom" }, { v: "Female", l: "Bride" }].map(({ v, l }) => (
             <button
-              key={g}
-              onClick={() => setFilters((p) => ({ ...p, gender: g }))}
-              className={`py-2 px-3 rounded-xl text-xs font-medium border transition-all ${filters.gender === g ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/40"}`}
+              key={v}
+              onClick={() => setFilters(p => ({ ...p, gender: v }))}
+              className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all ${filters.gender === v ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:border-primary/40"}`}
             >
-              {g === "all" ? "Sab" : g === "Male" ? "Var" : "Vadhu"}
+              {l}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Religion */}
       <div className="space-y-2">
-        <Label className="text-xs font-semibold text-primary uppercase tracking-wider">Dharm</Label>
-        <Select value={filters.religion} onValueChange={(v) => setFilters((p) => ({ ...p, religion: v }))}>
-          <SelectTrigger>
-            <SelectValue placeholder="Dharm Chunein" />
-          </SelectTrigger>
+        <Label className="text-xs font-bold text-primary uppercase tracking-wider">Religion</Label>
+        <Select value={filters.religion} onValueChange={v => setFilters(p => ({ ...p, religion: v }))}>
+          <SelectTrigger><SelectValue placeholder="Any Religion" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Koi Bhi</SelectItem>
+            <SelectItem value="all">Any Religion</SelectItem>
             <SelectItem value="Hindu">Hindu</SelectItem>
             <SelectItem value="Muslim">Muslim</SelectItem>
             <SelectItem value="Sikh">Sikh</SelectItem>
@@ -250,32 +225,18 @@ function FilterPanel({
         </Select>
       </div>
 
-      {/* Age Range */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div className="flex justify-between items-center">
-          <Label className="text-xs font-semibold text-primary uppercase tracking-wider">Aayu (Age)</Label>
-          <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full">
-            {filters.ageRange[0]} – {filters.ageRange[1]} saal
+          <Label className="text-xs font-bold text-primary uppercase tracking-wider">Age Range</Label>
+          <span className="text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full">
+            {filters.ageRange[0]} – {filters.ageRange[1]} yrs
           </span>
         </div>
-        <Slider
-          defaultValue={[21, 55]}
-          max={70}
-          min={18}
-          step={1}
-          value={filters.ageRange}
-          onValueChange={(v) => setFilters((p) => ({ ...p, ageRange: v }))}
-          className="py-2"
-        />
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span>18 saal</span>
-          <span>70 saal</span>
+        <Slider defaultValue={[21, 55]} max={70} min={18} step={1} value={filters.ageRange} onValueChange={v => setFilters(p => ({ ...p, ageRange: v }))} className="py-2" />
+        <div className="flex justify-between text-xs text-muted-foreground font-semibold">
+          <span>18 yrs</span><span>70 yrs</span>
         </div>
       </div>
-
-      <Button className="w-full" onClick={onReset} variant="outline">
-        Sab Filters Hatayein
-      </Button>
     </div>
   );
 }

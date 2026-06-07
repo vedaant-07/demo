@@ -11,8 +11,18 @@ import { Stories } from "@/pages/stories";
 import { Register } from "@/pages/register";
 import { Interests } from "@/pages/interests";
 import { SubmitStory } from "@/pages/submit-story";
+import { AuthProvider } from "@/context/auth";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error: any) => {
+        if (error?.response?.status === 401) return false;
+        return failureCount < 2;
+      },
+    },
+  },
+});
 
 function Router() {
   return (
@@ -34,9 +44,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Layout>
-            <Router />
-          </Layout>
+          <AuthProvider>
+            <Layout>
+              <Router />
+            </Layout>
+          </AuthProvider>
         </WouterRouter>
         <Toaster />
       </TooltipProvider>

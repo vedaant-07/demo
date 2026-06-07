@@ -9,6 +9,24 @@ export interface HealthStatus {
   status: string;
 }
 
+export interface RegisterBody {
+  email: string;
+  name: string;
+  password: string;
+}
+
+export interface LoginBody {
+  email: string;
+  password: string;
+}
+
+export interface AuthUser {
+  id: number;
+  email: string;
+  name: string;
+  createdAt: string;
+}
+
 export interface Profile {
   id: number;
   name: string;

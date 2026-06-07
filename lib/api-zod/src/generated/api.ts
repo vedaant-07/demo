@@ -17,6 +17,51 @@ export const HealthCheckResponse = zod.object({
 
 
 /**
+ * @summary Register a new user
+ */
+export const RegisterBody = zod.object({
+  "email": zod.string(),
+  "name": zod.string(),
+  "password": zod.string()
+})
+
+
+/**
+ * @summary Log in
+ */
+export const LoginBody = zod.object({
+  "email": zod.string(),
+  "password": zod.string()
+})
+
+export const LoginResponse = zod.object({
+  "id": zod.number(),
+  "email": zod.string(),
+  "name": zod.string(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Log out
+ */
+export const LogoutResponse = zod.object({
+  "status": zod.string()
+})
+
+
+/**
+ * @summary Get current user
+ */
+export const GetMeResponse = zod.object({
+  "id": zod.number(),
+  "email": zod.string(),
+  "name": zod.string(),
+  "createdAt": zod.string()
+})
+
+
+/**
  * @summary List profiles with filters
  */
 export const ListProfilesQueryParams = zod.object({
@@ -67,7 +112,7 @@ export const CreateProfileBody = zod.object({
 
 
 /**
- * @summary Get featured/premium profiles
+ * @summary Get featured profiles
  */
 export const ListFeaturedProfilesResponseItem = zod.object({
   "id": zod.number(),
@@ -114,7 +159,7 @@ export const GetProfileResponse = zod.object({
 
 
 /**
- * @summary List interests sent or received
+ * @summary List interests
  */
 export const ListInterestsResponseItem = zod.object({
   "id": zod.number(),

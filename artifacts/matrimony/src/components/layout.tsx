@@ -1,18 +1,24 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { useHealthCheck } from "@workspace/api-client-react";
-import { Menu, X, Heart } from "lucide-react";
+import { Heart, Menu, X, LogIn, LogOut, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/context/auth";
+import { AuthModal } from "@/pages/login";
 
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
-  const { data: health } = useHealthCheck();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
+  const [authTab, setAuthTab] = useState<"login" | "register">("login");
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const openLogin = () => { setAuthTab("login"); setShowAuth(true); setMenuOpen(false); };
+  const openRegister = () => { setAuthTab("register"); setShowAuth(true); setMenuOpen(false); };
 
   const navLinks = [
-    { href: "/browse", label: "Profiles Dekhein" },
-    { href: "/stories", label: "Safal Jodiyaan" },
-    { href: "/interests", label: "Meri Pasand" },
+    { href: "/browse", label: "Browse Profiles" },
+    { href: "/stories", label: "Success Stories" },
+    { href: "/interests", label: "My Interests" },
   ];
 
   return (
@@ -32,29 +38,53 @@ export function Layout({ children }: { children: ReactNode }) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium tracking-wide transition-colors hover:text-primary ${location === link.href ? "text-primary" : "text-muted-foreground"}`}
+                className={`text-sm font-semibold tracking-wide transition-colors hover:text-primary ${location === link.href ? "text-primary" : "text-muted-foreground"}`}
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
-            <Link
-              href="/register"
-              className="hidden sm:block bg-primary text-primary-foreground px-5 py-2 rounded-full text-sm font-medium shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all hover:-translate-y-0.5"
-            >
-              Profile Banayein
-            </Link>
-            {/* Hamburger */}
-            <button
-              className="md:hidden p-2 rounded-lg text-primary hover:bg-primary/10 transition-colors"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle menu"
-            >
-              {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+          {/* Desktop Auth */}
+          <div className="hidden md:flex items-center gap-3">
+            {isAuthenticated ? (
+              <>
+                <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+                  <User className="w-4 h-4 text-primary" /> {user?.name}
+                </span>
+                <button
+                  onClick={logout}
+                  className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <LogOut className="w-4 h-4" /> Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={openLogin}
+                  className="flex items-center gap-1.5 text-sm font-semibold text-foreground hover:text-primary transition-colors"
+                >
+                  <LogIn className="w-4 h-4" /> Sign In
+                </button>
+                <button
+                  onClick={openRegister}
+                  className="bg-primary text-primary-foreground px-5 py-2 rounded-full text-sm font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all hover:-translate-y-0.5"
+                >
+                  Register Free
+                </button>
+              </>
+            )}
           </div>
+
+          {/* Hamburger */}
+          <button
+            className="md:hidden p-2 rounded-lg text-primary hover:bg-primary/10 transition-colors"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
 
         {/* Mobile Menu */}
@@ -64,8 +94,8 @@ export function Layout({ children }: { children: ReactNode }) {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="md:hidden overflow-hidden bg-background/95 backdrop-blur-xl border-t border-primary/10"
+              transition={{ duration: 0.3 }}
+              className="md:hidden overflow-hidden bg-background/97 backdrop-blur-xl border-t border-primary/10"
             >
               <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
                 {navLinks.map((link) => (
@@ -73,18 +103,32 @@ export function Layout({ children }: { children: ReactNode }) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`py-3 px-4 rounded-xl font-medium text-base transition-colors ${location === link.href ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"}`}
+                    className={`py-3 px-4 rounded-xl font-semibold text-base transition-colors ${location === link.href ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"}`}
                   >
                     {link.label}
                   </Link>
                 ))}
-                <Link
-                  href="/register"
-                  onClick={() => setMenuOpen(false)}
-                  className="mt-2 bg-primary text-primary-foreground px-5 py-3 rounded-full text-sm font-medium text-center shadow-md"
-                >
-                  Profile Banayein
-                </Link>
+                <div className="mt-3 pt-3 border-t border-border flex flex-col gap-2">
+                  {isAuthenticated ? (
+                    <>
+                      <div className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground">
+                        <User className="w-4 h-4 text-primary" /> Signed in as <strong>{user?.name}</strong>
+                      </div>
+                      <button onClick={logout} className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-destructive hover:bg-destructive/10">
+                        <LogOut className="w-4 h-4" /> Sign Out
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={openLogin} className="py-3 px-4 rounded-xl font-semibold text-base text-center border border-primary text-primary">
+                        Sign In
+                      </button>
+                      <button onClick={openRegister} className="bg-primary text-primary-foreground py-3 px-4 rounded-full text-sm font-bold text-center shadow-md">
+                        Register Free
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             </motion.div>
           )}
@@ -106,20 +150,20 @@ export function Layout({ children }: { children: ReactNode }) {
                 <h2 className="text-2xl font-serif font-bold text-secondary">Anurup Sathi</h2>
               </div>
               <p className="text-muted/60 font-light leading-relaxed text-sm">
-                Bharat ke shreshthatam parivaaron ke liye vishesh rishte-naate ka manch. Jahaan pyaar aur parampara milte hain.
+                India's premium matrimonial platform where tradition meets modernity. Trusted by thousands of families.
               </p>
             </div>
             <div>
-              <h3 className="text-secondary font-serif text-lg mb-4">Quick Links</h3>
+              <h3 className="text-secondary font-serif text-lg font-bold mb-4">Quick Links</h3>
               <ul className="space-y-2 text-sm text-muted/60">
-                <li><Link href="/browse" className="hover:text-secondary transition-colors">Profiles Dekhein</Link></li>
-                <li><Link href="/stories" className="hover:text-secondary transition-colors">Safal Jodiyaan</Link></li>
-                <li><Link href="/register" className="hover:text-secondary transition-colors">Profile Banayein</Link></li>
-                <li><Link href="/interests" className="hover:text-secondary transition-colors">Meri Pasand</Link></li>
+                <li><Link href="/browse" className="hover:text-secondary transition-colors">Browse Profiles</Link></li>
+                <li><Link href="/stories" className="hover:text-secondary transition-colors">Success Stories</Link></li>
+                <li><Link href="/register" className="hover:text-secondary transition-colors">Create Profile</Link></li>
+                <li><Link href="/interests" className="hover:text-secondary transition-colors">My Interests</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-secondary font-serif text-lg mb-4">Hamse Sampark</h3>
+              <h3 className="text-secondary font-serif text-lg font-bold mb-4">Contact Us</h3>
               <ul className="space-y-2 text-sm text-muted/60">
                 <li>support@anurupsathi.com</li>
                 <li>+91 98765 43210</li>
@@ -129,16 +173,14 @@ export function Layout({ children }: { children: ReactNode }) {
           </div>
           <div className="pt-6 border-t border-white/10 text-xs text-muted/40 flex flex-col sm:flex-row justify-between items-center gap-3">
             <p>&copy; {new Date().getFullYear()} Anurup Sathi Matrimony. All rights reserved.</p>
-            <p className="flex items-center gap-2">
-              System:&nbsp;
-              {health
-                ? <span className="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
-                : <span className="w-2 h-2 rounded-full bg-red-500 inline-block"></span>}
-              &nbsp;{health?.status || "Checking..."}
-            </p>
           </div>
         </div>
       </footer>
+
+      {/* Auth Modal */}
+      <AnimatePresence>
+        {showAuth && <AuthModal onClose={() => setShowAuth(false)} defaultTab={authTab} />}
+      </AnimatePresence>
     </div>
   );
 }

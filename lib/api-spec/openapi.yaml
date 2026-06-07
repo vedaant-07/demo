@@ -8,15 +8,11 @@ servers:
     description: Base API path
 tags:
   - name: health
-    description: Health operations
+  - name: auth
   - name: profiles
-    description: Member profile operations
   - name: interests
-    description: Interest/match operations
   - name: stories
-    description: Success story operations
   - name: stats
-    description: Platform statistics
 paths:
   /healthz:
     get:
@@ -30,6 +26,76 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBody"
+      responses:
+        "201":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "409":
+          description: Email already in use
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Log in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Invalid credentials
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Log out
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Not authenticated
 
   /profiles:
     get:
@@ -96,7 +162,7 @@ paths:
     get:
       operationId: listFeaturedProfiles
       tags: [profiles]
-      summary: Get featured/premium profiles
+      summary: Get featured profiles
       responses:
         "200":
           description: Featured profiles
@@ -132,7 +198,7 @@ paths:
     get:
       operationId: listInterests
       tags: [interests]
-      summary: List interests sent or received
+      summary: List interests
       responses:
         "200":
           description: Interests
@@ -167,7 +233,7 @@ paths:
       summary: List success stories
       responses:
         "200":
-          description: Success stories
+          description: Stories
           content:
             application/json:
               schema:
@@ -212,8 +278,40 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
+
+    RegisterBody:
+      type: object
+      required: [email, name, password]
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+
+    LoginBody:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    AuthUser:
+      type: object
+      required: [id, email, name, createdAt]
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
 
     Profile:
       type: object
