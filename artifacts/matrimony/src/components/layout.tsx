@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Heart, Menu, X, LogIn, LogOut, User, ChevronDown } from "lucide-react";
+import { Heart, Menu, X, LogOut, User, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/auth";
 import { AuthModal } from "@/pages/login";
@@ -97,7 +97,7 @@ export function Layout({ children }: { children: ReactNode }) {
                   onClick={openLogin}
                   className="flex items-center gap-1.5 text-sm font-bold text-foreground hover:text-primary transition-colors"
                 >
-                  <LogIn className="w-4 h-4" /> Sign In
+                  <User className="w-4 h-4" /> Sign In
                 </button>
                 <button
                   onClick={openRegister}
