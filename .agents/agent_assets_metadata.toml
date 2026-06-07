@@ -1,0 +1,50 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "Zjy0e9ut1IRQ2OyPAuKJk"
+uri = "file://artifacts/matrimony/src/assets/hero.jpg"
+type = "image"
+title = "Indian wedding couple grand celebration cinematic"
+
+[[outputs]]
+id = "lvf6OTdfC8c25hJd5eqmt"
+uri = "file://artifacts/matrimony/src/assets/bride_1.jpg"
+type = "image"
+title = "beautiful indian bride elegant portrait"
+
+[[outputs]]
+id = "kjSRbZWS0iYy2efB2IK1X"
+uri = "file://artifacts/matrimony/src/assets/bride_2.jpg"
+type = "image"
+title = "beautiful indian bride elegant portrait"
+
+[[outputs]]
+id = "pd3RdahIGmec3TpepmFs4"
+uri = "file://artifacts/matrimony/src/assets/bride_3.jpg"
+type = "image"
+title = "beautiful indian bride elegant portrait"
+
+[[outputs]]
+id = "s6cmQApfSdCBi66lkVsh3"
+uri = "file://artifacts/matrimony/src/assets/groom_1.jpg"
+type = "image"
+title = "handsome indian groom traditional portrait"
+
+[[outputs]]
+id = "hHR8zGBJreEm8zTpKdvAq"
+uri = "file://artifacts/matrimony/src/assets/groom_2.jpg"
+type = "image"
+title = "handsome indian groom traditional portrait"
+
+[[outputs]]
+id = "124QlHvz9wrwHJl3paEKo"
+uri = "file://artifacts/matrimony/src/assets/couple_1.jpg"
+type = "image"
+title = "happy indian couple marriage stories"
+
+[[outputs]]
+id = "ZgK6DIy2HhIBFiHbwNKNZ"
+uri = "file://artifacts/matrimony/src/assets/couple_2.jpg"
+type = "image"
+title = "happy indian couple marriage stories"
