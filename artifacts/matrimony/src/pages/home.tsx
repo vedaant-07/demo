@@ -24,7 +24,7 @@ export function Home() {
   return (
     <div className="w-full">
       {/* ── HERO ── */}
-      <section ref={heroRef} className="relative min-h-[100dvh] w-full overflow-hidden flex items-center justify-center">
+      <section ref={heroRef} className="relative min-h-[100dvh] w-full flex items-center justify-center" style={{ borderRadius: "0 0 3rem 3rem", overflow: "hidden" }}>
         <motion.div style={{ y, opacity }} className="absolute inset-0 z-0">
           <img src={weddingImg} alt="Indian Wedding Celebration" className="w-full h-full object-cover object-top" />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/65 to-black/25" />
