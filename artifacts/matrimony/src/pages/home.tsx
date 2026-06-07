@@ -1,8 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "wouter";
 import { useGetStats, useListFeaturedProfiles, useListStories } from "@workspace/api-client-react";
-import heroImg from "@/assets/hero.jpg";
-import coupleImg from "@/assets/couple_1.jpg";
+import weddingImg from "@/assets/wedding_main.png";
 import { ProfileCard } from "@/components/profile-card";
 import { useRef } from "react";
 import { ArrowRight, Heart, Users, CheckCircle, Star } from "lucide-react";
@@ -27,15 +26,12 @@ export function Home() {
     <div className="w-full">
       {/* ── HERO ── */}
       <section ref={heroRef} className="relative min-h-[100dvh] w-full overflow-hidden flex items-center justify-center">
-        {/* Background */}
         <motion.div style={{ y, opacity }} className="absolute inset-0 z-0">
-          <img src={heroImg} alt="Indian Wedding" className="w-full h-full object-cover" />
-          {/* Strong dark gradient for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
+          <img src={weddingImg} alt="Indian Wedding Celebration" className="w-full h-full object-cover object-top" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/65 to-black/25" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
         </motion.div>
 
-        {/* Floating petals */}
         <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
           {Array.from({ length: 14 }).map((_, i) => (
             <div
@@ -65,12 +61,14 @@ export function Home() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="text-6xl sm:text-8xl md:text-9xl font-serif font-bold text-white leading-[1.0] tracking-tight drop-shadow-2xl"
+            className="text-5xl sm:text-7xl md:text-8xl font-serif font-bold text-white leading-[1.05] tracking-tight drop-shadow-2xl"
             style={{ textShadow: "0 4px 30px rgba(0,0,0,0.8), 0 2px 6px rgba(0,0,0,0.9)" }}
           >
-            Anurup
+            Anurup Sathi
             <br />
-            <span className="text-secondary italic" style={{ textShadow: "0 4px 30px rgba(0,0,0,0.8)" }}>Sathi</span>
+            <span className="text-secondary italic text-3xl sm:text-4xl md:text-5xl font-medium" style={{ textShadow: "0 4px 30px rgba(0,0,0,0.8)" }}>
+              आपका जीवन साथी
+            </span>
           </motion.h1>
 
           <motion.p
@@ -224,8 +222,8 @@ export function Home() {
               transition={{ duration: 1 }}
               className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl"
             >
-              <img src={coupleImg} alt="Happy Couple" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <img src={weddingImg} alt="Indian Wedding Celebration" className="w-full h-full object-cover object-center" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6">
                 <div className="flex items-center gap-1 mb-2">
                   {[1,2,3,4,5].map(s => <Star key={s} className="w-4 h-4 text-secondary fill-secondary" />)}

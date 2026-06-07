@@ -11,6 +11,7 @@ import { Stories } from "@/pages/stories";
 import { Register } from "@/pages/register";
 import { Interests } from "@/pages/interests";
 import { SubmitStory } from "@/pages/submit-story";
+import { MyProfile } from "@/pages/my-profile";
 import { AuthProvider } from "@/context/auth";
 
 const queryClient = new QueryClient({
@@ -34,6 +35,7 @@ function Router() {
       <Route path="/submit-story" component={SubmitStory} />
       <Route path="/register" component={Register} />
       <Route path="/interests" component={Interests} />
+      <Route path="/my-profile" component={MyProfile} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -9,7 +9,10 @@ export function ProfileCard({ profile }: { profile: Profile }) {
         {/* Photo */}
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
-            src={profile.photo || "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80"}
+            src={profile.photo || (profile.gender === "Female"
+              ? "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80"
+              : "https://images.unsplash.com/photo-1591604021695-0c69b7c05981?w=600&q=80"
+            )}
             alt={profile.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />

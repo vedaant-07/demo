@@ -8,6 +8,7 @@ import {
   GetProfileParams,
   GetProfileResponse,
   ListFeaturedProfilesResponse,
+  UpdateProfileBody,
 } from "@workspace/api-zod";
 
 const router: IRouter = Router();
@@ -91,6 +92,36 @@ router.get("/profiles/:id", async (req, res): Promise<void> => {
   res.json(GetProfileResponse.parse({
     ...profile,
     createdAt: profile.createdAt.toISOString(),
+  }));
+});
+
+router.patch("/profiles/:id", async (req, res): Promise<void> => {
+  const params = GetProfileParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+
+  const parsed = UpdateProfileBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: parsed.error.message });
+    return;
+  }
+
+  const [updated] = await db
+    .update(profilesTable)
+    .set(parsed.data)
+    .where(eq(profilesTable.id, params.data.id))
+    .returning();
+
+  if (!updated) {
+    res.status(404).json({ error: "Profile not found" });
+    return;
+  }
+
+  res.json(GetProfileResponse.parse({
+    ...updated,
+    createdAt: updated.createdAt.toISOString(),
   }));
 });
 

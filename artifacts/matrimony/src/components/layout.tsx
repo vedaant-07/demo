@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Heart, Menu, X, LogIn, LogOut, User } from "lucide-react";
+import { Heart, Menu, X, LogIn, LogOut, User, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/auth";
 import { AuthModal } from "@/pages/login";
@@ -10,6 +10,7 @@ export function Layout({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [authTab, setAuthTab] = useState<"login" | "register">("login");
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
 
   const openLogin = () => { setAuthTab("login"); setShowAuth(true); setMenuOpen(false); };
@@ -23,7 +24,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background selection:bg-primary selection:text-primary-foreground">
-      <header className="fixed top-0 inset-x-0 z-50 glass-panel border-b border-primary/10 shadow-sm">
+      <header className="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-xl border-b border-primary/15 shadow-sm">
         <div className="container mx-auto px-4 md:px-8 h-16 md:h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group" onClick={() => setMenuOpen(false)}>
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
@@ -38,7 +39,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-semibold tracking-wide transition-colors hover:text-primary ${location === link.href ? "text-primary" : "text-muted-foreground"}`}
+                className={`text-sm font-bold tracking-wide transition-colors hover:text-primary ${location === link.href ? "text-primary" : "text-foreground"}`}
               >
                 {link.label}
               </Link>
@@ -48,22 +49,53 @@ export function Layout({ children }: { children: ReactNode }) {
           {/* Desktop Auth */}
           <div className="hidden md:flex items-center gap-3">
             {isAuthenticated ? (
-              <>
-                <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
-                  <User className="w-4 h-4 text-primary" /> {user?.name}
-                </span>
+              <div className="relative">
                 <button
-                  onClick={logout}
-                  className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/15 transition-colors border border-primary/20"
                 >
-                  <LogOut className="w-4 h-4" /> Sign Out
+                  <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center">
+                    <User className="w-3.5 h-3.5 text-primary-foreground" />
+                  </div>
+                  <span className="text-sm font-bold text-foreground">{user?.name}</span>
+                  <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${showUserMenu ? "rotate-180" : ""}`} />
                 </button>
-              </>
+                <AnimatePresence>
+                  {showUserMenu && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-xl border border-border overflow-hidden z-50"
+                    >
+                      <div className="px-4 py-3 border-b border-border">
+                        <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Signed in as</p>
+                        <p className="font-bold text-sm text-foreground truncate">{user?.name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                      </div>
+                      <Link
+                        href="/my-profile"
+                        onClick={() => setShowUserMenu(false)}
+                        className="flex items-center gap-2.5 px-4 py-3 text-sm font-semibold text-foreground hover:bg-primary/5 hover:text-primary transition-colors"
+                      >
+                        <User className="w-4 h-4" /> My Profile
+                      </Link>
+                      <button
+                        onClick={() => { setShowUserMenu(false); logout(); }}
+                        className="w-full flex items-center gap-2.5 px-4 py-3 text-sm font-semibold text-destructive hover:bg-destructive/5 transition-colors border-t border-border"
+                      >
+                        <LogOut className="w-4 h-4" /> Sign Out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ) : (
               <>
                 <button
                   onClick={openLogin}
-                  className="flex items-center gap-1.5 text-sm font-semibold text-foreground hover:text-primary transition-colors"
+                  className="flex items-center gap-1.5 text-sm font-bold text-foreground hover:text-primary transition-colors"
                 >
                   <LogIn className="w-4 h-4" /> Sign In
                 </button>
@@ -95,7 +127,7 @@ export function Layout({ children }: { children: ReactNode }) {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden overflow-hidden bg-background/97 backdrop-blur-xl border-t border-primary/10"
+              className="md:hidden overflow-hidden bg-white border-t border-primary/10"
             >
               <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
                 {navLinks.map((link) => (
@@ -103,7 +135,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`py-3 px-4 rounded-xl font-semibold text-base transition-colors ${location === link.href ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"}`}
+                    className={`py-3 px-4 rounded-xl font-bold text-base transition-colors ${location === link.href ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"}`}
                   >
                     {link.label}
                   </Link>
@@ -111,16 +143,20 @@ export function Layout({ children }: { children: ReactNode }) {
                 <div className="mt-3 pt-3 border-t border-border flex flex-col gap-2">
                   {isAuthenticated ? (
                     <>
-                      <div className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground">
-                        <User className="w-4 h-4 text-primary" /> Signed in as <strong>{user?.name}</strong>
-                      </div>
-                      <button onClick={logout} className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-destructive hover:bg-destructive/10">
+                      <Link
+                        href="/my-profile"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-foreground hover:bg-muted"
+                      >
+                        <User className="w-4 h-4 text-primary" /> My Profile
+                      </Link>
+                      <button onClick={() => { setMenuOpen(false); logout(); }} className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-destructive hover:bg-destructive/10">
                         <LogOut className="w-4 h-4" /> Sign Out
                       </button>
                     </>
                   ) : (
                     <>
-                      <button onClick={openLogin} className="py-3 px-4 rounded-xl font-semibold text-base text-center border border-primary text-primary">
+                      <button onClick={openLogin} className="py-3 px-4 rounded-xl font-bold text-base text-center border border-primary text-primary">
                         Sign In
                       </button>
                       <button onClick={openRegister} className="bg-primary text-primary-foreground py-3 px-4 rounded-full text-sm font-bold text-center shadow-md">
@@ -181,6 +217,11 @@ export function Layout({ children }: { children: ReactNode }) {
       <AnimatePresence>
         {showAuth && <AuthModal onClose={() => setShowAuth(false)} defaultTab={authTab} />}
       </AnimatePresence>
+
+      {/* Close user menu on outside click */}
+      {showUserMenu && (
+        <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} />
+      )}
     </div>
   );
 }

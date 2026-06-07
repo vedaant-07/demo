@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, Mail, Lock, User, Heart, X } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email address"),
@@ -38,6 +39,7 @@ export function AuthModal({ onClose, defaultTab = "login" }: AuthModalProps) {
   const [tab, setTab] = useState<"login" | "register">(defaultTab);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
 
   const loginMutation = useLogin();
   const registerMutation = useRegister();
@@ -58,6 +60,7 @@ export function AuthModal({ onClose, defaultTab = "login" }: AuthModalProps) {
         queryClient.invalidateQueries();
         toast({ title: "Welcome back!", description: "You have successfully signed in." });
         onClose();
+        setLocation("/my-profile");
       },
       onError: (err: any) => {
         const msg = err?.response?.data?.error || "Invalid email or password.";
@@ -70,8 +73,9 @@ export function AuthModal({ onClose, defaultTab = "login" }: AuthModalProps) {
     registerMutation.mutate({ data: { name: data.name, email: data.email, password: data.password } }, {
       onSuccess: () => {
         queryClient.invalidateQueries();
-        toast({ title: "Account created!", description: "Welcome to Anurup Sathi." });
+        toast({ title: "Account created!", description: "Welcome to Anurup Sathi. Complete your profile below." });
         onClose();
+        setLocation("/my-profile");
       },
       onError: (err: any) => {
         const msg = err?.response?.data?.error || "Registration failed. Please try again.";

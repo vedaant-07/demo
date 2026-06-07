@@ -159,6 +159,45 @@ export const GetProfileResponse = zod.object({
 
 
 /**
+ * @summary Update a profile
+ */
+export const UpdateProfileParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateProfileBody = zod.object({
+  "name": zod.string(),
+  "age": zod.number(),
+  "gender": zod.string(),
+  "religion": zod.string(),
+  "caste": zod.string().optional(),
+  "city": zod.string(),
+  "state": zod.string().optional(),
+  "education": zod.string().optional(),
+  "profession": zod.string().optional(),
+  "photo": zod.string().optional(),
+  "bio": zod.string()
+})
+
+export const UpdateProfileResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "age": zod.number(),
+  "gender": zod.string(),
+  "religion": zod.string(),
+  "caste": zod.string().nullish(),
+  "city": zod.string(),
+  "state": zod.string().nullish(),
+  "education": zod.string().nullish(),
+  "profession": zod.string().nullish(),
+  "photo": zod.string(),
+  "bio": zod.string(),
+  "featured": zod.boolean(),
+  "createdAt": zod.string().optional()
+})
+
+
+/**
  * @summary List interests
  */
 export const ListInterestsResponseItem = zod.object({
